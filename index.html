@@ -1,0 +1,878 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VELORA | Event Planning Studio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #10100f;
+  --card: #1b1b18;
+  --gold: #d8b77c;
+  --gold-light: #f1d9a9;
+  --text: #f5f0e7;
+  --muted: #aaa69b;
+  --border: #34332d;
+  --green: #9ac5a2;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+}
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 245px 1fr;
+  min-height: 100vh;
+}
+.sidebar {
+  background: #151513;
+  border-right: 1px solid var(--border);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+}
+.logo {
+  font: 600 30px 'Playfair Display', serif;
+  letter-spacing: 6px;
+  color: var(--gold-light);
+}
+.logo-sub {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.nav-title {
+  color: #77746c;
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin: 40px 0 12px;
+}
+nav { display: grid; gap: 8px; }
+.nav-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  padding: 13px;
+  text-align: left;
+  border-radius: 10px;
+  font-size: 13px;
+}
+.nav-btn:hover, .nav-btn.active {
+  background: #302b22;
+  color: var(--gold-light);
+}
+.sidebar-note {
+  margin-top: auto;
+  padding: 18px;
+  background: #252219;
+  border: 1px solid #49402e;
+  border-radius: 13px;
+}
+.sidebar-note h3 {
+  font: 18px 'Playfair Display', serif;
+  color: var(--gold-light);
+}
+.sidebar-note p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+main {
+  padding: 32px 5%;
+  max-width: 1600px;
+  width: 100%;
+  margin: auto;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+.eyebrow {
+  color: var(--gold);
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+h1 {
+  font: 600 32px 'Playfair Display', serif;
+  margin: 7px 0;
+}
+.date {
+  color: var(--muted);
+  font-size: 12px;
+}
+.page { display: none; }
+.page.active { display: block; }
+.welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+.welcome h2 {
+  font: 25px 'Playfair Display', serif;
+  margin: 0 0 8px;
+}
+.welcome p {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0;
+}
+.btn {
+  background: var(--gold);
+  color: #211b11;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.btn:hover { background: var(--gold-light); }
+.btn-dark {
+  background: #302f29;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 15px;
+  margin-bottom: 22px;
+}
+.stat, .card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+.stat-label {
+  color: var(--muted);
+  font-size: 11px;
+}
+.stat-number {
+  font: 27px 'Playfair Display', serif;
+  margin: 14px 0 5px;
+  color: var(--gold-light);
+}
+.stat-small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.columns {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 18px;
+}
+.card { margin-bottom: 18px; }
+.card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.card-heading h3 {
+  font: 19px 'Playfair Display', serif;
+  margin: 0;
+}
+.muted { color: var(--muted); font-size: 11px; }
+.event {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px;
+  margin-bottom: 10px;
+  background: #24241f;
+  border: 1px solid #33332c;
+  border-radius: 12px;
+}
+.event-date {
+  background: #393020;
+  color: var(--gold-light);
+  text-align: center;
+  min-width: 48px;
+  padding: 8px 5px;
+  border-radius: 9px;
+}
+.event-date b {
+  display: block;
+  font: 22px 'Playfair Display', serif;
+}
+.event-date small { font-size: 9px; }
+.event-info { flex: 1; }
+.event-info h4 { margin: 0 0 5px; font-size: 13px; }
+.event-info p { margin: 0; color: var(--muted); font-size: 10px; }
+.status {
+  background: #29372c;
+  color: var(--green);
+  padding: 6px 9px;
+  border-radius: 20px;
+  font-size: 9px;
+}
+.status.pending {
+  background: #393020;
+  color: var(--gold-light);
+}
+.progress {
+  height: 8px;
+  background: #37362f;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.progress div {
+  height: 100%;
+  background: var(--gold);
+  width: 0;
+}
+.task {
+  display: flex;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  align-items: center;
+}
+.task input { accent-color: var(--gold); }
+.task.done span {
+  text-decoration: line-through;
+  color: #777;
+}
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 500px; }
+th, td {
+  text-align: left;
+  padding: 14px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+}
+th { color: var(--muted); font-weight: 500; }
+td { color: var(--text); }
+.delete {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--gold-light);
+  border-radius: 7px;
+  padding: 6px 9px;
+}
+.vendor-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 15px;
+}
+.vendor {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 22px;
+  border-radius: 15px;
+}
+.vendor-icon { font-size: 27px; }
+.vendor h3 {
+  font: 18px 'Playfair Display', serif;
+  color: var(--gold-light);
+}
+.vendor p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000b;
+  z-index: 10;
+  place-items: center;
+  padding: 15px;
+}
+.modal.show { display: grid; }
+.modal-box {
+  background: #20201c;
+  border: 1px solid #63543a;
+  border-radius: 16px;
+  padding: 25px;
+  width: min(480px,100%);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-box h2 {
+  font: 23px 'Playfair Display', serif;
+  margin-top: 0;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.field {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 12px;
+}
+.field.full { grid-column: 1/-1; }
+.field label {
+  color: var(--muted);
+  font-size: 10px;
+}
+.field input, .field select {
+  background: #11110f;
+  color: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  width: 100%;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+.empty {
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+  font-size: 12px;
+}
+@media(max-width:950px) {
+  .stats { grid-template-columns: repeat(2,1fr); }
+  .columns { grid-template-columns: 1fr; }
+  .vendor-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media(max-width:650px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { padding: 15px; }
+  .nav-title, .sidebar-note { display: none; }
+  nav { display: flex; overflow-x: auto; margin-top: 15px; }
+  .nav-btn { white-space: nowrap; padding: 10px; }
+  main { padding: 22px 15px; }
+  h1 { font-size: 26px; }
+  .welcome { align-items: flex-start; flex-direction: column; }
+  .vendor-grid { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .field.full { grid-column: auto; }
+  .date { display: none; }
+}
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <div>
+    <div class="logo">VELORA</div>
+    <div class="logo-sub">EVENT PLANNING STUDIO</div>
+  </div>
+
+  <div class="nav-title">MAIN MENU</div>
+  <nav>
+    <button class="nav-btn active" onclick="showPage('dashboard',this)">◈ Overview</button>
+    <button class="nav-btn" onclick="showPage('events',this)">▦ My Events</button>
+    <button class="nav-btn" onclick="showPage('guests',this)">♧ Guests</button>
+    <button class="nav-btn" onclick="showPage('budget',this)">₹ Budget</button>
+    <button class="nav-btn" onclick="showPage('tasks',this)">✓ Tasks</button>
+    <button class="nav-btn" onclick="showPage('vendors',this)">✧ Vendors</button>
+  </nav>
+
+  <div class="sidebar-note">
+    <h3>Make it memorable.</h3>
+    <p>Every beautiful celebration begins with a perfect plan. Organise every detail with VELORA.</p>
+  </div>
+</aside>
+
+<main>
+<header>
+  <div>
+    <div class="eyebrow">YOUR PRIVATE EVENT SPACE</div>
+    <h1 id="pageTitle">Overview</h1>
+  </div>
+  <div class="date" id="today"></div>
+</header>
+
+<!-- DASHBOARD -->
+<section class="page active" id="dashboard">
+  <div class="welcome">
+    <div>
+      <h2>Welcome to VELORA.</h2>
+      <p>Your celebrations, beautifully organised.</p>
+    </div>
+    <button class="btn" onclick="openModal('eventModal')">＋ Create Event</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">TOTAL EVENTS</div>
+      <div class="stat-number" id="eventCount">0</div>
+      <div class="stat-small">Events planned</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">TOTAL GUESTS</div>
+      <div class="stat-number" id="guestCount">0</div>
+      <div class="stat-small">People invited</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">TASKS COMPLETED</div>
+      <div class="stat-number" id="taskCount">0/0</div>
+      <div class="stat-small">Planning progress</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">TOTAL BUDGET</div>
+      <div class="stat-number" id="totalBudget">₹0</div>
+      <div class="stat-small">Planned amount</div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div>
+      <div class="card">
+        <div class="card-heading">
+          <h3>Upcoming Events</h3>
+          <button class="delete" onclick="showPage('events')">View all →</button>
+        </div>
+        <div id="dashboardEvents"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-heading">
+          <h3>Planning Checklist</h3>
+          <button class="delete" onclick="showPage('tasks')">Manage →</button>
+        </div>
+        <div id="dashboardTasks"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-heading"><h3>Budget Overview</h3></div>
+        <div class="stat-number" id="budgetDisplay">₹0</div>
+        <div class="muted">Total planned budget</div>
+        <div class="progress"><div id="budgetProgress"></div></div>
+        <div class="muted" id="budgetText">₹0 expenses recorded</div>
+      </div>
+
+      <div class="card">
+        <div class="card-heading"><h3>Our Philosophy</h3></div>
+        <p style="font:20px 'Playfair Display';color:var(--gold-light);line-height:1.6">
+          "The best memories are created when every detail comes together."
+        </p>
+        <div class="muted">— VELORA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="page" id="events">
+  <div class="welcome">
+    <div><h2>Manage Your Events</h2><p>All your celebrations in one place.</p></div>
+    <button class="btn" onclick="openModal('eventModal')">＋ Add Event</button>
+  </div>
+  <div class="card">
+    <div class="card-heading"><h3>All Events</h3></div>
+    <div id="allEvents"></div>
+  </div>
+</section>
+
+<!-- GUESTS -->
+<section class="page" id="guests">
+  <div class="welcome">
+    <div><h2>Guest Management</h2><p>Manage invitations and RSVP responses.</p></div>
+    <button class="btn" onclick="openModal('guestModal')">＋ Add Guest</button>
+  </div>
+  <div class="card">
+    <div class="card-heading"><h3>Guest Directory</h3></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>NAME</th><th>CONTACT</th><th>EVENT</th><th>RSVP</th><th>ACTION</th></tr></thead>
+        <tbody id="guestTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- BUDGET -->
+<section class="page" id="budget">
+  <div class="welcome">
+    <div><h2>Budget Management</h2><p>Track your event expenses.</p></div>
+    <button class="btn" onclick="openModal('expenseModal')">＋ Add Expense</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">PLANNED BUDGET</div><div class="stat-number" id="plannedBudget">₹0</div></div>
+    <div class="stat"><div class="stat-label">TOTAL EXPENSES</div><div class="stat-number" id="spentBudget">₹0</div></div>
+    <div class="stat"><div class="stat-label">REMAINING</div><div class="stat-number" id="remainingBudget">₹0</div></div>
+    <div class="stat"><div class="stat-label">BUDGET USED</div><div class="stat-number" id="usedBudget">0%</div></div>
+  </div>
+  <div class="card">
+    <div class="card-heading"><h3>Expense Details</h3></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>DESCRIPTION</th><th>CATEGORY</th><th>EVENT</th><th>AMOUNT</th><th>ACTION</th></tr></thead>
+        <tbody id="expenseTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TASKS -->
+<section class="page" id="tasks">
+  <div class="welcome">
+    <div><h2>Planning Checklist</h2><p>Complete every detail before the big day.</p></div>
+    <button class="btn" onclick="openModal('taskModal')">＋ Add Task</button>
+  </div>
+  <div class="card">
+    <div class="card-heading"><h3>Your Tasks</h3><span class="muted" id="taskProgressText"></span></div>
+    <div id="allTasks"></div>
+  </div>
+</section>
+
+<!-- VENDORS -->
+<section class="page" id="vendors">
+  <div class="welcome">
+    <div><h2>Event Services</h2><p>Explore essential services for your celebrations.</p></div>
+  </div>
+  <div class="vendor-grid">
+    <div class="vendor"><div class="vendor-icon">✿</div><h3>Decoration</h3><p>Floral arrangements, stage design, lighting and themed decorations.</p></div>
+    <div class="vendor"><div class="vendor-icon">♨</div><h3>Catering</h3><p>Food menus, refreshments, desserts and guest dining arrangements.</p></div>
+    <div class="vendor"><div class="vendor-icon">♫</div><h3>Entertainment</h3><p>DJs, live music, performances and celebration activities.</p></div>
+    <div class="vendor"><div class="vendor-icon">◎</div><h3>Photography</h3><p>Capture special moments with professional photography services.</p></div>
+    <div class="vendor"><div class="vendor-icon">⌂</div><h3>Venues</h3><p>Discover banquet halls, gardens, rooftops and party spaces.</p></div>
+    <div class="vendor"><div class="vendor-icon">✧</div><h3>Special Services</h3><p>Invitations, cakes, gifts, return favours and event accessories.</p></div>
+  </div>
+</section>
+</main>
+</div>
+
+<!-- EVENT MODAL -->
+<div class="modal" id="eventModal">
+<div class="modal-box">
+<h2>Create New Event</h2>
+<form id="eventForm">
+<div class="field"><label>EVENT NAME</label><input name="name" required placeholder="Birthday Celebration"></div>
+<div class="form-grid">
+<div class="field"><label>EVENT TYPE</label>
+<select name="type"><option>Birthday</option><option>Wedding</option><option>Anniversary</option><option>College Party</option><option>Corporate Event</option><option>Other</option></select></div>
+<div class="field"><label>EVENT DATE</label><input name="date" type="date" required></div>
+<div class="field"><label>VENUE</label><input name="venue" placeholder="Event location"></div>
+<div class="field"><label>EXPECTED GUESTS</label><input name="guests" type="number" min="0" value="20"></div>
+<div class="field full"><label>PLANNED BUDGET (₹)</label><input name="budget" type="number" min="0" value="10000"></div>
+</div>
+<div class="modal-actions">
+<button type="button" class="btn btn-dark" onclick="closeModal('eventModal')">Cancel</button>
+<button class="btn">Save Event</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- GUEST MODAL -->
+<div class="modal" id="guestModal">
+<div class="modal-box">
+<h2>Add Guest</h2>
+<form id="guestForm">
+<div class="field"><label>GUEST NAME</label><input name="name" required placeholder="Full name"></div>
+<div class="field"><label>EMAIL OR PHONE</label><input name="contact" placeholder="Contact details"></div>
+<div class="field"><label>EVENT</label><select name="event" id="guestEvent"></select></div>
+<div class="field"><label>RSVP STATUS</label>
+<select name="status"><option>Pending</option><option>Confirmed</option><option>Declined</option></select></div>
+<div class="modal-actions">
+<button type="button" class="btn btn-dark" onclick="closeModal('guestModal')">Cancel</button>
+<button class="btn">Save Guest</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- EXPENSE MODAL -->
+<div class="modal" id="expenseModal">
+<div class="modal-box">
+<h2>Add Expense</h2>
+<form id="expenseForm">
+<div class="field"><label>DESCRIPTION</label><input name="description" required placeholder="Decoration payment"></div>
+<div class="field"><label>CATEGORY</label>
+<select name="category"><option>Decor</option><option>Food</option><option>Venue</option><option>Entertainment</option><option>Photography</option><option>Other</option></select></div>
+<div class="field"><label>EVENT</label><select name="event" id="expenseEvent"></select></div>
+<div class="field"><label>AMOUNT (₹)</label><input name="amount" type="number" min="0" required></div>
+<div class="modal-actions">
+<button type="button" class="btn btn-dark" onclick="closeModal('expenseModal')">Cancel</button>
+<button class="btn">Save Expense</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- TASK MODAL -->
+<div class="modal" id="taskModal">
+<div class="modal-box">
+<h2>Add Planning Task</h2>
+<form id="taskForm">
+<div class="field"><label>TASK NAME</label><input name="title" required placeholder="Book the event venue"></div>
+<div class="field"><label>RELATED EVENT</label><select name="event" id="taskEvent"></select></div>
+<div class="modal-actions">
+<button type="button" class="btn btn-dark" onclick="closeModal('taskModal')">Cancel</button>
+<button class="btn">Add Task</button>
+</div>
+</form>
+</div>
+</div>
+
+<script>
+// VELORA APPLICATION DATA
+const STORAGE_KEY = "velora_project_data";
+
+let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+  events: [],
+  guests: [],
+  expenses: [],
+  tasks: [
+    {id:1,title:"Choose an event theme",event:"General",done:false},
+    {id:2,title:"Shortlist a venue",event:"General",done:false},
+    {id:3,title:"Prepare the guest list",event:"General",done:false}
+  ]
+};
+
+const money = n => "₹" + Number(n || 0).toLocaleString("en-IN");
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  render();
+}
+
+function showPage(id,button) {
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  if(button) button.classList.add("active");
+
+  const titles = {
+    dashboard:"Overview",
+    events:"My Events",
+    guests:"Guest Management",
+    budget:"Budget Management",
+    tasks:"Planning Tasks",
+    vendors:"Event Services"
+  };
+  document.getElementById("pageTitle").textContent=titles[id];
+}
+
+function openModal(id) {
+  refreshOptions();
+  document.getElementById(id).classList.add("show");
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove("show");
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function refreshOptions() {
+  const options = '<option value="General">General</option>' +
+    data.events.map(e=>`<option value="${escapeHTML(e.name)}">${escapeHTML(e.name)}</option>`).join("");
+
+  ["guestEvent","expenseEvent","taskEvent"].forEach(id=>{
+    document.getElementById(id).innerHTML=options;
+  });
+}
+
+function eventHTML(e) {
+  const date = e.date ? new Date(e.date+"T00:00:00") : null;
+  const day = date ? date.getDate() : "--";
+  const month = date ? date.toLocaleString("en",{month:"short"}).toUpperCase() : "TBD";
+
+  return `<div class="event">
+    <div class="event-date"><b>${day}</b><small>${month}</small></div>
+    <div class="event-info">
+      <h4>${escapeHTML(e.name)}</h4>
+      <p>${escapeHTML(e.type)} · ${escapeHTML(e.venue || "Venue not decided")} · ${e.guests} guests</p>
+    </div>
+    <span class="status pending">Planned</span>
+  </div>`;
+}
+
+function taskHTML(t) {
+  return `<div class="task ${t.done?"done":""}">
+    <input type="checkbox" ${t.done?"checked":""} onchange="toggleTask(${t.id})">
+    <span>${escapeHTML(t.title)} <small class="muted">· ${escapeHTML(t.event)}</small></span>
+    <button class="delete" style="margin-left:auto" onclick="removeItem('tasks',${t.id})">×</button>
+  </div>`;
+}
+
+function removeItem(type,id) {
+  if(!confirm("Are you sure you want to delete this item?")) return;
+  data[type]=data[type].filter(item=>item.id!==id);
+  saveData();
+}
+
+function toggleTask(id) {
+  const task=data.tasks.find(t=>t.id===id);
+  if(task) task.done=!task.done;
+  saveData();
+}
+
+function render() {
+  const budget=data.events.reduce((s,e)=>s+Number(e.budget||0),0);
+  const spent=data.expenses.reduce((s,e)=>s+Number(e.amount||0),0);
+  const completed=data.tasks.filter(t=>t.done).length;
+  const guests=data.guests.length;
+
+  document.getElementById("eventCount").textContent=data.events.length;
+  document.getElementById("guestCount").textContent=guests;
+  document.getElementById("taskCount").textContent=completed+"/"+data.tasks.length;
+  document.getElementById("totalBudget").textContent=money(budget);
+  document.getElementById("budgetDisplay").textContent=money(budget);
+  document.getElementById("budgetText").textContent=money(spent)+" expenses recorded";
+
+  const percent=budget ? Math.min(100,Math.round(spent/budget*100)) : 0;
+  document.getElementById("budgetProgress").style.width=percent+"%";
+
+  document.getElementById("plannedBudget").textContent=money(budget);
+  document.getElementById("spentBudget").textContent=money(spent);
+  document.getElementById("remainingBudget").textContent=money(budget-spent);
+  document.getElementById("usedBudget").textContent=percent+"%";
+
+  const sorted=[...data.events].sort((a,b)=>a.date.localeCompare(b.date));
+  const eventList=sorted.length
+    ? sorted.map(eventHTML).join("")
+    : '<div class="empty">No events yet. Create your first event!</div>';
+
+  document.getElementById("dashboardEvents").innerHTML=sorted.slice(0,4).map(eventHTML).join("") ||
+    '<div class="empty">No events yet. Create your first event!</div>';
+
+  document.getElementById("allEvents").innerHTML=sorted.map(e=>
+    eventHTML(e)+`<button class="delete" onclick="removeItem('events',${e.id})">Remove event</button>`
+  ).join("") || '<div class="empty">Your events will appear here.</div>';
+
+  document.getElementById("dashboardTasks").innerHTML=data.tasks.slice(0,4).map(taskHTML).join("") ||
+    '<div class="empty">No tasks added.</div>';
+
+  document.getElementById("allTasks").innerHTML=data.tasks.map(taskHTML).join("") ||
+    '<div class="empty">Add your first planning task.</div>';
+
+  document.getElementById("taskProgressText").textContent=
+    completed+" of "+data.tasks.length+" completed";
+
+  document.getElementById("guestTable").innerHTML=data.guests.map(g=>`
+    <tr>
+      <td>${escapeHTML(g.name)}</td>
+      <td>${escapeHTML(g.contact || "—")}</td>
+      <td>${escapeHTML(g.event)}</td>
+      <td><span class="status ${g.status==="Confirmed"?"":"pending"}">${escapeHTML(g.status)}</span></td>
+      <td><button class="delete" onclick="removeItem('guests',${g.id})">Remove</button></td>
+    </tr>
+  `).join("") || '<tr><td colspan="5" class="empty">No guests added yet.</td></tr>';
+
+  document.getElementById("expenseTable").innerHTML=data.expenses.map(e=>`
+    <tr>
+      <td>${escapeHTML(e.description)}</td>
+      <td>${escapeHTML(e.category)}</td>
+      <td>${escapeHTML(e.event)}</td>
+      <td>${money(e.amount)}</td>
+      <td><button class="delete" onclick="removeItem('expenses',${e.id})">Remove</button></td>
+    </tr>
+  `).join("") || '<tr><td colspan="5" class="empty">No expenses recorded.</td></tr>';
+
+  refreshOptions();
+}
+
+// FORM SUBMISSIONS
+document.getElementById("eventForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  const f=new FormData(this);
+  data.events.push({
+    id:Date.now(),
+    name:f.get("name"),
+    type:f.get("type"),
+    date:f.get("date"),
+    venue:f.get("venue"),
+    guests:f.get("guests"),
+    budget:f.get("budget")
+  });
+  this.reset();
+  closeModal("eventModal");
+  saveData();
+  alert("Event created successfully!");
+});
+
+document.getElementById("guestForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  const f=new FormData(this);
+  data.guests.push({
+    id:Date.now(),
+    name:f.get("name"),
+    contact:f.get("contact"),
+    event:f.get("event"),
+    status:f.get("status")
+  });
+  this.reset();
+  closeModal("guestModal");
+  saveData();
+  alert("Guest added successfully!");
+});
+
+document.getElementById("expenseForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  const f=new FormData(this);
+  data.expenses.push({
+    id:Date.now(),
+    description:f.get("description"),
+    category:f.get("category"),
+    event:f.get("event"),
+    amount:f.get("amount")
+  });
+  this.reset();
+  closeModal("expenseModal");
+  saveData();
+  alert("Expense saved successfully!");
+});
+
+document.getElementById("taskForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  const f=new FormData(this);
+  data.tasks.push({
+    id:Date.now(),
+    title:f.get("title"),
+    event:f.get("event"),
+    done:false
+  });
+  this.reset();
+  closeModal("taskModal");
+  saveData();
+  alert("Task added successfully!");
+});
+
+// CLOSE MODALS WHEN CLICKING OUTSIDE
+document.querySelectorAll(".modal").forEach(modal=>{
+  modal.addEventListener("click",e=>{
+    if(e.target===modal) modal.classList.remove("show");
+  });
+});
+
+// CURRENT DATE
+document.getElementById("today").textContent=
+  new Date().toLocaleDateString("en-IN",{
+    weekday:"long",day:"numeric",month:"long",year:"numeric"
+  });
+
+// START APPLICATION
+render();
+</script>
+</body>
+</html>
